@@ -1,0 +1,61 @@
+/**/controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # diff_drive_controller:
+    #   type: diff_drive_controller/DiffDriveController
+
+    # Controller for executing  trajectories on a group of joints.
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+## here are the parameters of each controller ##
+# /**/diff_drive_controller:
+#   ros__parameters:
+#     publish_rate: 20.0
+#     left_wheel_names: ["Revolute_DRIVING_WHEEL_L","Revolute_FREE_WHEEL_LEFT"]
+#     right_wheel_names: ["Revolute_DRIVING_WHEEL_R","Revolute_FREE_WHEEL_RIGHT"]
+#     wheel_radius: 0.03
+#     wheel_separation: 0.08
+    
+#     cmd_vel_timeout: 0.2
+#     publish_limited_velocity: true
+#     velocity_rolling_window_size: 5
+
+#     base_frame_id: base_link # default
+#     odom_frame_id: odom # default
+    
+#     pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # default
+#     twist_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # default
+    
+#     use_stamped_vel: false
+#     position_feedback: false
+#     open_loop: true
+#     enable_odom_tf: true
+#     # 네임스페이스를 프레임에 prefix로 붙여 /jetank1/odom -> /jetank1/base_link 형태로 출력
+#     tf_frame_prefix_enable: true
+
+/**/arm_controller:
+  ros__parameters:
+    joints:
+      - Revolute_BEARING
+      - Revolute_SERVO_UPPER
+      - Revolute_ARM_LOW
+      - Revolute_SERVO_TOP
+      - Revolute_MAGNETIC_BAR
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+    
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: true
+    open_loop_control: true
+
+

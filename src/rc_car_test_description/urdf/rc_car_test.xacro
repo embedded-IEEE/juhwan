@@ -1,0 +1,277 @@
+<?xml version="1.0" ?>
+<robot name="rc_car_test" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find rc_car_test_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find rc_car_test_description)/urdf/rc_car_test.ros2control" />
+<xacro:include filename="$(find rc_car_test_description)/urdf/rc_car_test.gazebo" />
+
+
+<!-- 회전 기준 프레임: base_link_rot (z축으로 180도 회전) -->
+<link name="base_link_rot">
+  <!-- Gazebo가 요구하는 최소 관성; 로봇 전체 질량은 base_link에 있음 -->
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.0001"/>
+    <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+</link>
+
+<!-- 실제 로봇 바디 -->
+<link name="base_link">
+  <inertial>
+    <origin xyz="0.10 0 0.03"/>
+    <mass value="0.6"/>   <!-- 기존 10kg → 0.6kg -->
+    <inertia ixx="0.002" iyy="0.004" izz="0.005"
+             ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- Ackermann 기준점: rear axle center -->
+<link name="rear_axle">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.0001"/>
+    <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+</link>
+
+<!-- base_link_rot -> base_link : z축 180도 회전 -->
+<joint name="base_rot_joint" type="fixed">
+  <origin xyz="0 0 0" rpy="0 0 3.1415926535"/>
+  <parent link="base_link_rot"/>
+  <child link="base_link"/>
+</joint>
+
+<joint name="rear_axle_joint" type="fixed">
+  <!-- rear wheel centers: base_link x=0.0825, z=0.0125 -> base_link_rot x=-0.0825 -->
+  <origin xyz="-0.0825 0 0.0125" rpy="0 0 0"/>
+  <parent link="base_link_rot"/>
+  <child link="rear_axle"/>
+</joint>
+
+<link name="steering_right_2">
+  <inertial>
+    <origin xyz="0 0 0"/>
+    <mass value="0.01"/> <!-- 10g -->
+    <inertia ixx="1e-6" iyy="1e-6" izz="2e-6"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0575 -0.042076 -0.0075" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/steering_right_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0575 -0.042076 -0.0075" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/steering_right_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lidar_link_1">
+  <inertial>
+    <origin xyz="0 0 0"/>
+    <mass value="0.12"/>  <!-- 120g 정도 -->
+    <inertia ixx="4e-5" iyy="4e-5" izz="6e-5"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.115 0.0 -0.023" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/lidar_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.115 0.0 -0.023" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/lidar_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rear_right_wheel_1">
+  <inertial>
+    <origin xyz="0 0.015 0"/>
+    <mass value="0.05"/>  <!-- 기존 0.08kg → 0.05kg -->
+    <inertia ixx="8e-6" iyy="1.6e-5" izz="8e-6"
+            ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+
+  <visual>
+    <origin xyz="-0.0825 -0.053 -0.0125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/rear_right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0825 -0.053 -0.0125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/rear_right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="front_right_wheel_1">
+  <inertial>
+    <origin xyz="0 0.015 0"/>
+    <mass value="0.05"/>  <!-- 기존 0.08kg → 0.05kg -->
+    <inertia ixx="8e-6" iyy="1.6e-5" izz="8e-6"
+            ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0575 -0.053 -0.01125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/front_right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0575 -0.053 -0.01125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/front_right_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rear_left_wheel_1">
+  <inertial>
+    <origin xyz="0 -0.015 0"/>
+    <mass value="0.05"/>  <!-- 기존 0.08kg → 0.05kg -->
+    <inertia ixx="8e-6" iyy="1.6e-5" izz="8e-6"
+            ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0825 0.053 -0.0125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/rear_left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0825 0.053 -0.0125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/rear_left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="front_left_wheel_1">
+  <inertial>
+    <origin xyz="0 -0.015 0"/>
+    <mass value="0.05"/>  <!-- 기존 0.08kg → 0.05kg -->
+    <inertia ixx="8e-6" iyy="1.6e-5" izz="8e-6"
+            ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0575 0.053 -0.01125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/front_left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0575 0.053 -0.01125" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/front_left_wheel_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="steering_left_1">
+  <inertial>
+    <origin xyz="0 0 0"/>
+    <mass value="0.01"/> <!-- 10g -->
+    <inertia ixx="1e-6" iyy="1e-6" izz="2e-6"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0575 0.042076 -0.0075" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/visual/steering_left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0575 0.042076 -0.0075" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find rc_car_test_description)/meshes/collision/steering_left_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="steering_joint_right" type="revolute">
+  <origin xyz="-0.0575 0.042076 0.0075" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="steering_right_2"/>
+  <axis xyz="-0.0 -0.0 1.0"/>
+  <limit upper="0.785398" lower="-0.785398" effort="20.0" velocity="2.0"/>
+  <dynamics damping="1.0" friction="0.2"/>
+</joint>
+
+<joint name="fix_9" type="fixed">
+  <origin xyz="-0.115 0.0 0.023" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="lidar_link_1"/>
+</joint>
+
+<joint name="wheel_joint_rear_right" type="continuous">
+  <origin xyz="0.0825 0.053 0.0125" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="rear_right_wheel_1"/>
+  <axis xyz="-0.0 -1.0 -0.0"/>
+  <limit effort="5.0" velocity="30.0"/>
+  <dynamics damping="0.1" friction="0.05"/>
+</joint>
+
+<joint name="wheel_joint_front_right" type="continuous">
+  <origin xyz="0.0 0.010924 0.00375" rpy="0 0 0"/>
+  <parent link="steering_right_2"/>
+  <child link="front_right_wheel_1"/>
+  <axis xyz="-0.0 -1.0 -0.0"/>
+  <limit effort="5.0" velocity="30.0"/>
+  <dynamics damping="0.1" friction="0.05"/>
+</joint>
+
+<joint name="wheel_joint_rear_left" type="continuous">
+  <origin xyz="0.0825 -0.053 0.0125" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="rear_left_wheel_1"/>
+  <axis xyz="0.0 -1.0 -0.0"/>
+  <limit effort="5.0" velocity="30.0"/>
+  <dynamics damping="0.1" friction="0.05"/>
+</joint>
+
+<joint name="wheel_joint_front_left" type="continuous">
+  <origin xyz="0.0 -0.010924 0.00375" rpy="0 0 0"/>
+  <parent link="steering_left_1"/>
+  <child link="front_left_wheel_1"/>
+  <axis xyz="-0.0 -1.0 -0.0"/>
+  <limit effort="5.0" velocity="30.0"/>
+  <dynamics damping="0.1" friction="0.05"/>
+</joint>
+
+<joint name="steering_joint_left" type="revolute">
+  <origin xyz="-0.0575 -0.042076 0.0075" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="steering_left_1"/>
+  <axis xyz="-0.0 -0.0 1.0"/>
+  <limit upper="0.785398" lower="-0.785398" effort="20.0" velocity="2.0"/>
+  <dynamics damping="1.0" friction="0.2"/>
+</joint>
+
+</robot>

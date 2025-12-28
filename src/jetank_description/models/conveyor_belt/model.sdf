@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+    <model name="conveyor_belt">
+        
+        <link name="belt_fixed">
+            <inertial>
+                <mass>10.0</mass>
+                <inertia>
+                <ixx>1</ixx>
+                <iyy>1</iyy>
+                <izz>1</izz>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyz>0</iyz>
+                </inertia>
+            </inertial>
+
+            <visual name="frame_visual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                <mesh>
+                    <uri>model://conveyor_belt/meshes/conveyor_belt.dae</uri>
+                </mesh>
+                </geometry>
+            </visual>
+
+            <collision name="frame_collision">
+                <pose>0 0 0.0425 0 0 0</pose>
+                <geometry>
+                <box>
+                    <size>0.07 0.595 0.085</size>
+                </box>
+                </geometry>
+            </collision>
+        </link>
+
+
+        <link name="belt_moving">
+            <allow_auto_disable>false</allow_auto_disable> <!-- 자동 슬립 방지(중요)-->
+            <inertial>
+                <mass>1.0</mass>
+                <inertia>
+                    <ixx>1.0</ixx>
+                    <iyy>1.0</iyy>
+                    <izz>1.0</izz>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyz>0</iyz>
+                </inertia>
+            </inertial>
+
+            <!-- 실제 물리 collision (메쉬 실제 크기 기준) -->
+            <collision name="belt_collision">
+                <pose>0 0 0.085 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>0.058 0.5552 0.002</size>
+                    </box>
+                </geometry>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>50</mu>
+                            <mu2>50</mu2>
+                        </ode>
+                        <bullet>
+                            <friction>100.0</friction>
+                            <friction2>100.0</friction2>
+                        </bullet>
+                    </friction>
+                </surface>
+            </collision>
+
+            <!-- collision 확인용 visual -->
+            <!-- <visual name="belt_collision_visual">
+                <pose>0 0 0.085 0 0 0</pose>
+                <geometry>
+                    <box>
+                        <size>0.058 0.5552 0.002</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 0.4</ambient>
+                    <diffuse>1 0 0 0.4</diffuse>
+                </material>
+            </visual> -->
+        </link>
+
+        <joint name="belt_joint" type="prismatic">
+            <parent>belt_fixed</parent>
+            <child>belt_moving</child>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-0.005</lower>
+                    <upper>0.01</upper> <!-- 이동 폭 좁게 -->
+                    <effort>1000000</effort>
+                    <velocity>2.0</velocity>
+                </limit>
+            </axis>
+        </joint>
+
+        <!-- ===================== -->
+        <!-- 컨베이어 플러그인 -->
+        <!-- ===================== -->
+        <plugin filename="ignition-gazebo-pose-publisher-system"
+        name="ignition::gazebo::systems::PosePublisher">
+            <use_pose_vector_msg>true</use_pose_vector_msg>
+
+            <!-- 모델 TF만 필요하면 true/false 상관없이 보통 모델은 나옴.
+                그래도 명시 추천 -->
+            <publish_model_pose>true</publish_model_pose>
+
+            <!-- belt_fixed / belt_moving 같은 링크 프레임도 띄우고 싶으면 true -->
+            <publish_link_pose>true</publish_link_pose>
+
+            <publish_visual_pose>false</publish_visual_pose>
+            <publish_collision_pose>false</publish_collision_pose>
+            <publish_nested_model_pose>false</publish_nested_model_pose>
+
+            <update_frequency>100</update_frequency>
+        </plugin>
+
+        
+        <plugin name="jetank::ConveyorPlugin" filename="libconveyor_plugin.so">
+            <joint_name>belt_joint</joint_name>
+            <velocity>0.5</velocity> <!-- 컨베이어 속도 -->
+        </plugin>
+
+
+
+    </model>
+</sdf>

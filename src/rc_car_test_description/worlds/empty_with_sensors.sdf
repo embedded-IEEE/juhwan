@@ -1,0 +1,327 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <world name="lidar_test_world">
+
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"></plugin>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"></plugin>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"></plugin>
+
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <gui fullscreen="0">
+
+      <plugin filename="GzScene3D" name="3D View">
+        <gz-gui>
+          <title>3D View</title>
+          <property type="string" key="state">docked</property>
+        </gz-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <ambient_light>0.4 0.4 0.4</ambient_light>
+        <background_color>0.8 0.8 0.8</background_color>
+        <camera_pose>-2 0 2 0 0.5 0</camera_pose>
+      </plugin>
+
+      <plugin filename="VisualizeLidar" name="Visualize Lidar">
+      </plugin>
+
+      <plugin filename="TransformControl" name="Transform control"/>
+
+      <plugin filename="WorldControl" name="World control"/>
+      <plugin filename="WorldStats" name="World stats"/>
+      <plugin filename="EntityContextMenuPlugin" name="Entity context menu"/>
+    </gui>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 미로형 벽 배치로 피쳐 추가 -->
+    <model name="maze_walls">
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+      <link name="segment_north">
+        <pose>0 6 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>12 0.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>12 0.2 1.0</size></box></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="segment_south">
+        <pose>0 -6 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>12 0.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>12 0.2 1.0</size></box></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="segment_west">
+        <pose>-6 0 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>0.2 12 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 12 1.0</size></box></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="segment_east">
+        <pose>6 0 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>0.2 12 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 12 1.0</size></box></geometry>
+          <material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="inner_L1">
+        <pose>-2 2 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>4 0.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>4 0.2 1.0</size></box></geometry>
+          <material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="inner_L2">
+        <pose>-2 2 0.5 0 0 1.5707</pose>
+        <collision name="collision">
+          <geometry><box><size>0.2 3 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 3 1.0</size></box></geometry>
+          <material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="inner_corridor1">
+        <pose>2 -1.5 0.5 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>5 0.2 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>5 0.2 1.0</size></box></geometry>
+          <material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="inner_corridor2">
+        <pose>0 -1.5 0.5 0 0 1.5707</pose>
+        <collision name="collision">
+          <geometry><box><size>0.2 4 1.0</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 4 1.0</size></box></geometry>
+          <material><ambient>0.5 0.6 0.7 1</ambient><diffuse>0.5 0.6 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="test_box">
+      <pose>2 0 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <gravity>false</gravity>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.166</ixx> <ixy>0</ixy> <ixz>0</ixz>
+            <iyy>0.166</iyy> <iyz>0</iyz> <izz>0.166</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box> <size>1 1 1</size> </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box> <size>1 1 1</size> </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 추가 장애물들 -->
+    <model name="wall_strip">
+      <pose>4 0 0.5 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>4 0.3 1</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>4 0.3 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 1</ambient>
+            <diffuse>0.6 0.6 0.6 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pillar_1">
+      <pose>1.0 2.0 0.5 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>0.25</radius><length>1.0</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>0.25</radius><length>1.0</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.2 0.4 0.8 1</ambient>
+            <diffuse>0.2 0.4 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="pillar_2">
+      <pose>-1.5 -1.5 0.35 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>0.15</radius><length>0.7</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>0.15</radius><length>0.7</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.8 0.5 0.2 1</ambient>
+            <diffuse>0.8 0.5 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="crate_cluster">
+      <pose>-3 1 0.25 0 0 0</pose>
+      <static>false</static>
+      <link name="crate_1">
+        <collision name="collision">
+          <geometry><box><size>0.5 0.5 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.5 0.5 0.5</size></box></geometry>
+          <material><ambient>0.5 0.3 0.3 1</ambient><diffuse>0.5 0.3 0.3 1</diffuse></material>
+        </visual>
+      </link>
+      <link name="crate_2">
+        <pose>0.6 0.3 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry><box><size>0.6 0.4 0.6</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.6 0.4 0.6</size></box></geometry>
+          <material><ambient>0.4 0.4 0.2 1</ambient><diffuse>0.4 0.4 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="ramp">
+      <pose>0 -3 0.1 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>2 1 0.2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>2 1 0.2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>50</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>200</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>0</real_time_update_rate>
+    </physics>
+
+
+  </world>
+</sdf>

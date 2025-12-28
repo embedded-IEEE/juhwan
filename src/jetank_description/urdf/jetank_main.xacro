@@ -1,0 +1,607 @@
+<?xml version="1.0" ?>
+<robot name="jetank" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="namespace" default="jetank" />
+
+    <xacro:property name="PI" value="3.1415" />
+    <xacro:property name="scale" value="0.001 0.001 0.001" />
+
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.004435000283629018 -0.010243918252694353 -0.02819811925527743" rpy="0 0 0"/>
+            <mass value="4.0"/>
+            <inertia ixx="0.008" iyy="0.018" izz="0.020" ixy="4.5e-05" iyz="2e-05" ixz="2.5e-04"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/base_link.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/base_link_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="ANTENNA_L_1">
+        <inertial>
+            <origin xyz="-0.00010440589830879032 -0.028760958470267856 0.051254628121503915" rpy="0 0 0"/>
+            <mass value="0.1712590340150529"/>
+            <inertia ixx="0.000314" iyy="0.000306" izz="1.1e-05" ixy="-0.0" iyz="2.1e-05" ixz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.070085 0.055118 0.007934" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/ANTENNA_L_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="-0.070085 0.055118 0.007934" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/ANTENNA_L_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="BEARING_1">
+        <inertial>
+            <origin xyz="1.0562222860915904e-07 -5.0363254768710786e-06 0.002529664311033247" rpy="0 0 0"/>
+            <mass value="0.05589211207057759"/>
+            <inertia ixx="9e-06" iyy="9e-06" izz="1.7e-05" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.046079 0.010536 -0.01116" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/BEARING_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.046079 0.010536 -0.01116" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/BEARING_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="ARM_LOWER_1">
+        <inertial>
+            <origin xyz="0.01064714156754467 5.4423566282478866e-05 0.029441657866703955" rpy="0 0 0"/>
+            <mass value="0.1036438493797283"/>
+            <inertia ixx="8.8e-05" iyy="8e-05" izz="7.2e-05" ixy="0.0" iyz="0.0" ixz="-2e-06"/>
+        </inertial>
+        
+        <visual>
+            <origin xyz="-0.046079 -0.010553 -0.01919" rpy="0 0 3.141593"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/ARM_LOWER_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        
+        <collision>
+            <origin xyz="-0.046079 -0.010553 -0.01919" rpy="0 0 3.141593"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/ARM_LOWER_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="FREE_WHEEL_L_1">
+        <inertial>
+            <origin xyz="-4.900425932286012e-05 -0.01352712007658996 -2.8519849338277947e-05" rpy="0 0 0"/>
+            <mass value="0.11488889485414525"/>
+            <inertia ixx="4.1e-05" iyy="4e-05" izz="4.1e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.05431 0.054968 0.052234" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/FREE_WHEEL_L_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="-0.05431 0.054968 0.052234" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision/FREE_WHEEL_L_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="FREE_WHEEL_R_1">
+        <inertial>
+            <origin xyz="4.918568823523983e-05 0.013527127364721232 2.8053712538597675e-05" rpy="0 0 0"/>
+            <mass value="0.11488889485415185"/>
+            <inertia ixx="4.1e-05" iyy="4e-05" izz="4.1e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.063868 -0.033862 0.052048" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/FREE_WHEEL_R_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.063868 -0.033862 0.052048" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision/FREE_WHEEL_R_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="SERVO_LOWER_1">
+        <inertial>
+            <origin xyz="-0.0177806432945467 -0.017517446416127354 -3.676811534183977e-05" rpy="0 0 0"/>
+            <mass value="0.20982161326471963"/>
+            <inertia ixx="3.7e-05" iyy="3.5e-05" izz="5.8e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.032586 -0.009458 -0.086381" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/SERVO_LOWER_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.032586 -0.009458 -0.086381" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/SERVO_LOWER_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="DRIVER_WHEEL_R_2">
+        <inertial>
+            <origin xyz="6.935655254387829e-05 0.019022053226744773 2.9509046361002322e-05" rpy="0 0 0"/>
+            <mass value="0.1049698213829899"/>
+            <inertia ixx="2.3e-05" iyy="2.5e-05" izz="2.3e-05" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.054631 -0.033431 0.052049" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/DRIVER_WHEEL_R_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="-0.054631 -0.033431 0.052049" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision/DRIVER_WHEEL_R_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="DRIVER_WHEEL_L_1">
+        <inertial>
+            <origin xyz="-6.918869203477451e-05 -0.01902200130388708 -5.0233203182634134e-05" rpy="0 0 0"/>
+            <mass value="0.10496982138298995"/>
+            <inertia ixx="2.3e-05" iyy="2.5e-05" izz="2.3e-05" ixy="0.0" iyz="0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.064189 0.054537 0.052234" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/DRIVER_WHEEL_L_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.064189 0.054537 0.052234" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision/DRIVER_WHEEL_L_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="ARM_LOW_2">
+        <inertial>
+            <origin xyz="1.7687520004194823e-08 -9.963926975617432e-05 0.04750023925684019" rpy="0 0 0"/>
+            <mass value="0.0618639746492048"/>
+            <inertia ixx="0.000109" iyy="6.8e-05" izz="4.6e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.059673 0.008894 -0.086342" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/ARM_LOW_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.059673 0.008894 -0.086342" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/ARM_LOW_2_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="SERVO_UPPER_1">
+        <inertial>
+            <origin xyz="2.9576048448734515e-06 0.0008485888864527055 0.009304921523950349" rpy="0 0 0"/>
+            <mass value="0.20982161326472018"/>
+            <inertia ixx="5.8e-05" iyy="3.5e-05" izz="3.7e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.059673 0.009093 -0.181342" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/SERVO_UPPER_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.059673 0.009093 -0.181342" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/SERVO_UPPER_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="ARM_MIDDLE_1">
+        <inertial>
+            <origin xyz="-0.007177444253456761 0.019934386293931565 0.0438021171732606" rpy="0 0 0"/>
+            <mass value="0.061863974649204866"/>
+            <inertia ixx="9.3e-05" iyy="6.9e-05" izz="3e-05" ixy="0.0" iyz="5e-06" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.052251 0.030528 -0.208797" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/ARM_MIDDLE_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.052251 0.030528 -0.208797" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/ARM_MIDDLE_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="SERVO_TOP_1">
+        <inertial>
+            <origin xyz="0.007078521472817033 0.017733298353123855 0.010744947314865527" rpy="0 0 0"/>
+            <mass value="0.20982278190693662"/>
+            <inertia ixx="5.8e-05" iyy="3.5e-05" izz="3.7e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.066251 0.030676 -0.303797" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/SERVO_TOP_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.066251 0.030676 -0.303797" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/SERVO_TOP_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="MAGNETIC_HOLDER_1">
+        <inertial>
+            <origin xyz="-0.022224880170435432 7.661146605784062e-05 0.0019460812062961352" rpy="0 0 0"/>
+            <mass value="0.04320508566431304"/>
+            <inertia ixx="2.6e-05" iyy="1.2e-05" izz="3.2e-05" ixy="-0.0" iyz="-0.0" ixz="1e-06"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.059157 0.012094 -0.323847" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/MAGNETIC_HOLDER_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.059157 0.012094 -0.323847" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/MAGNETIC_HOLDER_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="MAGNETIC_BAR_1">
+        <inertial>
+            <origin xyz="-0.012452342928912341 4.292456372326746e-05 0.0010891852693441506" rpy="0 0 0"/>
+            <mass value="0.0020394898259123236"/>
+            <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.14179 0.011809 -0.331077" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/MAGNETIC_BAR_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.14179 0.011809 -0.331077" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/MAGNETIC_BAR_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="MAGNETIC_1">
+        <inertial>
+            <origin xyz="-0.007471112070137148 2.5645436706895827e-05 0.0006533721924183444" rpy="0 0 0"/>
+            <mass value="0.03699225349601977"/>
+            <inertia ixx="2e-06" iyy="2e-06" izz="2e-06" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.166695 0.011723 -0.333256" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/MAGNETIC_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.166695 0.011723 -0.333256" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/MAGNETIC_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="SERVO_END_1">
+        <inertial>
+            <origin xyz="-0.022096769314818562 -0.009192620179157838 0.0027277032402819867" rpy="0 0 0"/>
+            <mass value="0.20982321632769318"/>
+            <inertia ixx="3.5e-05" iyy="3.7e-05" izz="5.7e-05" ixy="-0.0" iyz="2e-06" ixz="2e-06"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.094371 0.011973 -0.326928" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/SERVO_END_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="0.094371 0.011973 -0.326928" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/SERVO_END_1_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="ANTENNA_R_2">
+        <inertial>
+            <origin xyz="0.00010392026432098911 0.028545800060322313 0.05137523606181993" rpy="0 0 0"/>
+            <mass value="0.17125903401505282"/>
+            <inertia ixx="0.000314" iyy="0.000307" izz="1.1e-05" ixy="-0.0" iyz="-2e-05" ixz="-0.0"/>
+        </inertial>
+        <visual>
+            <origin xyz="-0.067106 -0.033293 0.007749" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/visual/ANTENNA_R_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="silver"/>
+        </visual>
+        <collision>
+            <origin xyz="-0.067106 -0.033293 0.007749" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find jetank_description)/meshes/collision_boxes/ANTENNA_R_2_box.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="Rigid_ANTENNA_L_BASE_JOINT" type="fixed">
+        <origin xyz="0.070085 -0.055118 -0.007934" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="ANTENNA_L_1"/>
+    </joint>
+
+    <joint name="Rigid_BEARING_BASE_JOINT" type="fixed">
+        <origin xyz="-0.046079 -0.010536 0.01116" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="BEARING_1"/>
+    </joint>
+
+    <joint name="Revolute_BEARING" type="revolute">
+    <origin xyz="0.0 -1.7e-05 0.00803" rpy="0 0 3.141593"/>
+    
+    <parent link="BEARING_1"/>
+    <child link="ARM_LOWER_1"/>
+    <axis xyz="-4e-06 -0.002097 0.999998"/>
+    <limit upper="3.141593" lower="-3.141593" effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="Revolute_FREE_WHEEL_LEFT" type="continuous">
+        <origin xyz="0.05431 -0.054968 -0.052234" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="FREE_WHEEL_L_1"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="Revolute_FREE_WHEEL_RIGHT" type="continuous">
+        <origin xyz="-0.063868 0.033862 -0.052048" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="FREE_WHEEL_R_1"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="Rigid_SERVO_LOWER_ARM_LOWER" type="fixed">
+        <origin xyz="0.013493 0.020011 0.067191" rpy="0 0 0"/>
+        <parent link="ARM_LOWER_1"/>
+        <child link="SERVO_LOWER_1"/>
+    </joint>
+
+    <joint name="Revolute_DRIVING_WHEEL_R" type="continuous"> 
+        <origin xyz="0.054631 0.033431 -0.052049" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="DRIVER_WHEEL_R_2"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit effort="100" velocity="100"/>
+    </joint>
+
+    <joint name="Revolute_DRIVING_WHEEL_L" type="continuous"> 
+        <origin xyz="-0.064189 -0.054537 -0.052234" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="DRIVER_WHEEL_L_1"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit effort="100" velocity="100"/>
+    </joint>
+    
+    <joint name="Revolute_ARM_LOW" type="continuous">
+        <origin xyz="-0.027087 -0.018352 -3.9e-05" rpy="0 0 0"/>
+        <parent link="SERVO_LOWER_1"/>
+        <child link="ARM_LOW_2"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit lower="-3.14" upper="3.14" effort="10.0" velocity="2.0"/>
+    </joint>
+
+    <joint name="Revolute_SERVO_UPPER" type="continuous">
+        <origin xyz="0.0 -0.000199 0.095" rpy="0 0 0"/>
+        <parent link="ARM_LOW_2"/>
+        <child link="SERVO_UPPER_1"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit lower="-3.14" upper="3.14" effort="10.0" velocity="2.0"/>
+    </joint>
+
+    <joint name="Rigid_ARM_MIDDLE_SERVO_UPPER" type="fixed">
+        <origin xyz="0.007422 -0.021435 0.027455" rpy="0 0 0"/>
+        <parent link="SERVO_UPPER_1"/>
+        <child link="ARM_MIDDLE_1"/>
+    </joint>
+
+    <joint name="Rigid_SERVO_UPPER_" type="fixed">
+        <origin xyz="-0.014 -0.000148 0.095" rpy="0 0 0"/>
+        <parent link="ARM_MIDDLE_1"/>
+        <child link="SERVO_TOP_1"/>
+    </joint>
+
+    <joint name="Revolute_SERVO_TOP" type="continuous">
+        <origin xyz="0.007094 0.018582 0.02005" rpy="0 0 3.14159"/>
+        <parent link="SERVO_TOP_1"/>
+        <child link="MAGNETIC_HOLDER_1"/>
+        <axis xyz="0.003633 0.999991 0.002097"/>
+        <limit lower="-3.14" upper="3.14" effort="10.0" velocity="2.0"/>
+    </joint>
+
+    <joint name="Revolute_MAGNETIC_BAR" type="continuous">
+        <origin xyz="-0.047419 0.000164 0.004149" rpy="0 0 0"/>
+        <parent link="SERVO_END_1"/>
+        <child link="MAGNETIC_BAR_1"/>
+        <axis xyz="-0.996188 0.003436 0.087159"/>
+        <limit lower="-3.14" upper="3.14" effort="10.0" velocity="2.0"/>
+    </joint>
+
+    <joint name="Rigid_MAGNETIC_MAGNETIC_BAR" type="fixed">
+        <origin xyz="-0.024905 8.6e-05 0.002179" rpy="0 0 0"/>
+        <parent link="MAGNETIC_BAR_1"/>
+        <child link="MAGNETIC_1"/>
+    </joint>
+
+    <joint name="Rigid_SERVO_END_MAGNETIC_HOLDER" type="fixed">
+        <origin xyz="-0.035214 0.000121 0.003081" rpy="0 0 0"/>
+        <parent link="MAGNETIC_HOLDER_1"/>
+        <child link="SERVO_END_1"/>
+    </joint>
+
+    <joint name="Rigid_ANTENNA_R_BASE_JOINT" type="fixed">
+        <origin xyz="0.067106 0.033293 -0.007749" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="ANTENNA_R_2"/>
+    </joint>    
+
+    <gazebo reference="base_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="BEARING_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="ARM_LOWER_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="SERVO_LOWER_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="ARM_LOW_2">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="SERVO_UPPER_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="ARM_MIDDLE_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="SERVO_TOP_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="MAGNETIC_HOLDER_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+    
+    <gazebo reference="SERVO_END_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="MAGNETIC_BAR_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="MAGNETIC_1">
+      <self_collide>true</self_collide>
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="DRIVER_WHEEL_R_2">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+    <gazebo reference="DRIVER_WHEEL_L_1">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+
+    <xacro:include filename="jetank_controllers.xacro"  />
+    <xacro:include filename="jetank_sensors.xacro"  />
+    
+    <xacro:include filename="jetank_materials.xacro" />
+    
+    <gazebo>
+      <plugin filename="libignition-gazebo-joint-state-publisher-system.so" 
+              name="ignition::gazebo::systems::JointStatePublisher">
+        <topic>/joint_states</topic> 
+      </plugin>
+      
+      <xacro:macro name="detachable_plugin_loop" params="i count">
+          <xacro:if value="${i &lt;= count}">
+              <plugin filename="ignition-gazebo-detachable-joint-system"
+                      name="ignition::gazebo::systems::DetachableJoint">
+                  <parent_link>MAGNETIC_BAR_1</parent_link>
+                  <child_model>jenga${i}</child_model>
+                  <child_link>body</child_link> <detach_topic>/$(arg namespace)/jenga${i}/detach</detach_topic>
+                  <attach_topic>/$(arg namespace)/jenga${i}/attach</attach_topic>
+              </plugin>
+              <xacro:detachable_plugin_loop i="${i + 1}" count="${count}" />
+          </xacro:if>
+      </xacro:macro>
+      
+      <xacro:detachable_plugin_loop i="1" count="4" />
+      
+    </gazebo>
+
+</robot>

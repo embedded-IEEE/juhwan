@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<robot name="jenga">
+
+  <link name="jenga_link">
+    
+    <inertial>
+      <mass value="0.0073"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="7.604166666666669e-07" ixy="0" ixz="0" 
+               iyy="7.604166666666669e-07" iyz="0" 
+               izz="7.604166666666669e-07"/>
+    </inertial>
+
+    <collision>
+      <origin xyz="0 0 0.00445" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.052 0.013 0.0089"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0.00445" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.052 0.013 0.0089"/>
+      </geometry>
+      <material name="wood_color">
+        <color rgba="0.6 0.4 0.2 1"/>
+      </material>
+    </visual>
+
+    <visual>
+      <origin xyz="0 0 0.0089" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.017 0.011 0.0005"/>
+      </geometry>
+      <material name="label_blue">
+        <color rgba="0.30 0.55 0.60 1"/>
+      </material>
+    </visual>
+
+  </link>
+
+  <gazebo>
+    <plugin filename="ignition-gazebo-pose-publisher-system"
+            name="ignition::gazebo::systems::PosePublisher">
+      <publish_link_pose>true</publish_link_pose>
+      <publish_visual_pose>false</publish_visual_pose>
+      <publish_nested_model_pose>true</publish_nested_model_pose>
+      <use_pose_vector_msg>true</use_pose_vector_msg>
+      <update_frequency>100</update_frequency>
+    </plugin>
+  </gazebo>
+
+</robot>

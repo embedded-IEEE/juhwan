@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<robot name="rc_car_test" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <!-- Steering joints -->
+    <joint name="steering_joint_left">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="steering_joint_right">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- Drive wheels -->
+    <joint name="wheel_joint_front_left">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="wheel_joint_front_right">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="wheel_joint_rear_left">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="wheel_joint_rear_right">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find rc_car_test_description)/config/rc_car_controllers.yaml</parameters>
+      
+      <ros>
+        <namespace>rc_car</namespace>
+      </ros>
+    </plugin>
+  </gazebo>
+
+</robot>
+

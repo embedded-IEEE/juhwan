@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>rc_nav2_bringup</name>
+  <version>0.1.0</version>
+  <description>Bringup package for Cartographer + Nav2 on RC Car</description>
+
+  <maintainer email="example@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Build / Run dependencies -->
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>cartographer_ros</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>nav2_controller</exec_depend>
+  <exec_depend>nav2_planner</exec_depend>
+  <exec_depend>nav2_bt_navigator</exec_depend>
+  <exec_depend>nav2_map_server</exec_depend>
+  <exec_depend>nav2_amcl</exec_depend>
+  <exec_depend>nav2_regulated_pure_pursuit_controller</exec_depend>
+  <exec_depend>nav2_behaviors</exec_depend>
+  <exec_depend>nav2_behavior_tree</exec_depend>
+  <exec_depend>nav2_recoveries</exec_depend>
+  <exec_depend>nav2_costmap_2d</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>rf2o_laser_odometry</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

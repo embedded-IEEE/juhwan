@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <PipelineSequence name="NavigateWithFinalAlign">
+      <RecoveryNode number_of_retries="3" name="NavigateRecovery">
+        <PipelineSequence name="NavigateThroughPoses">
+          <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="SmacHybrid"/>
+          <FollowPath path="{path}" controller_id="FollowPath"/>
+        </PipelineSequence>
+        <Sequence name="RecoveryActions">
+          <BackUp backup_dist="0.3" backup_speed="0.1"/>
+          <Wait wait_duration="0.5"/>
+          <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="SmacHybrid"/>
+          <FollowPath path="{path}" controller_id="FollowPath"/>
+        </Sequence>
+      </RecoveryNode>
+    </PipelineSequence>
+  </BehaviorTree>
+</root>

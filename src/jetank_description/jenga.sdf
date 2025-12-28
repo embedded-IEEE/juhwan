@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="jenga">
+    <pose>0 0 0 0 0 0</pose>
+
+    <link name="link">
+      <pose>0 0 0 0 0 0</pose>
+
+      <inertial>
+        <mass>0.0073</mass>
+        <inertia>
+          <ixx>7.604166666666669e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>7.604166666666669e-07</iyy>
+          <iyz>0</iyz>
+          <izz>7.604166666666669e-07</izz>
+        </inertia>
+      </inertial>
+
+      <collision name="collision">
+        <pose>0 0 0.00445 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.052 0.013 0.0089</size> <!-- 5.2cm * 1.3cm * 0.89cm -->
+          </box>
+        </geometry>
+
+        <surface>
+          <contact>
+            <poissons_ratio>0.347</poissons_ratio>
+            <elastic_modulus>8.8e+09</elastic_modulus>
+            <ode>
+              <kp>100000</kp>
+              <kd>100</kd>
+              <max_vel>100.0</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <torsional>
+              <coefficient>1.0</coefficient>
+              <use_patch_radius>0</use_patch_radius>
+              <surface_radius>0.01</surface_radius>
+            </torsional>
+          </friction>
+        </surface>
+      </collision>
+
+      <!-- main mesh visual -->
+      <visual name="visual">
+        <pose>0 0 0.00445 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.052 0.013 0.0089</size> 
+          </box>
+        </geometry>
+
+        <material>
+          <ambient>0.6 0.4 0.2 1</ambient>
+          <diffuse>0.6 0.4 0.2 1</diffuse>
+          <specular>0.05 0.05 0.05 1</specular>
+        </material>
+
+      </visual>
+
+      <!-- barcode label -->
+      <visual name="left_label">
+        <pose>-0.0261 0 0.00445 1.57 0 0</pose>
+
+        <geometry>
+          <plane>
+            <normal>-1 0 0</normal>
+            <size>0.011 0.007</size>
+          </plane>
+        </geometry>
+
+        <material>
+          <pbr>
+            <metal>
+              <!-- <albedo_map>file:///home/jinsun/jetank_ws/src/jetank/jetank_rl/models/cardboard_box/materials/textures/Barcodes/barcode_4.png</albedo_map> -->
+              <albedo_map>model://jenga/materials/textures/barcode_2.png</albedo_map>
+              <roughness>0.2</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+        </material>
+
+      </visual>
+
+    </link>
+  </model>
+</sdf>

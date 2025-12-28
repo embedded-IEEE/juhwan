@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="jenga">
+    <pose>0 0 0 0 0 0</pose>
+
+    <link name="body">
+      <pose>0 0 0 0 0 0</pose>
+
+      <inertial>
+        <mass>0.0073</mass>
+        <inertia>
+          <ixx>7.604166666666669e-07</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>7.604166666666669e-07</iyy>
+          <iyz>0</iyz>
+          <izz>7.604166666666669e-07</izz>
+        </inertia>
+      </inertial>
+
+      <collision name="collision">
+        <pose>0 0 0.00445 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.052 0.013 0.0089</size> 
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <poissons_ratio>0.347</poissons_ratio>
+            <elastic_modulus>8.8e+09</elastic_modulus>
+            <ode>
+              <kp>100000</kp>
+              <kd>100</kd>
+              <max_vel>100.0</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <torsional>
+              <coefficient>1.0</coefficient>
+              <use_patch_radius>0</use_patch_radius>
+              <surface_radius>0.01</surface_radius>
+            </torsional>
+          </friction>
+        </surface>
+      </collision>
+
+      <visual name="visual">
+        <pose>0 0 0.00445 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.052 0.013 0.0089</size> 
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.6 0.4 0.2 1</ambient>
+          <diffuse>0.6 0.4 0.2 1</diffuse>
+          <specular>0.05 0.05 0.05 1</specular>
+        </material>
+      </visual>
+
+      <visual name="top_label">
+        <pose>0 0 0.0089 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.017 0.011 0.0005</size>
+          </box>
+        </geometry>
+        <material>
+          <pbr>
+            <metal>
+              <albedo>0.30 0.55 0.60 1</albedo>
+              <metalness>0.9</metalness>
+              <roughness>0.2</roughness>
+            </metal>
+          </pbr>
+          <ambient>0.25 0.45 0.50 1</ambient>
+          <diffuse>0.30 0.55 0.60 1</diffuse>
+          <specular>0.6 0.6 0.6 1</specular>
+        </material>
+      </visual>
+    </link>
+
+    <plugin filename="ignition-gazebo-pose-publisher-system"
+            name="ignition::gazebo::systems::PosePublisher">
+      <publish_link_pose>false</publish_link_pose>
+      <publish_visual_pose>false</publish_visual_pose>
+      <publish_nested_model_pose>true</publish_nested_model_pose>
+      <use_pose_vector_msg>true</use_pose_vector_msg>
+      <update_frequency>100</update_frequency>
+    </plugin>
+
+  </model>
+</sdf>

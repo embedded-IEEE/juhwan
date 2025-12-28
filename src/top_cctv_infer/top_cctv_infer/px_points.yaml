@@ -1,0 +1,4 @@
+camera_click_points:
+  ros__parameters:
+    image_topic: /jetank/top_cctv1
+    px_points: 288,430;274,317;155,455;130,329
