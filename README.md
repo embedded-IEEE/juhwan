@@ -1,8 +1,95 @@
-# (0) 환경 세팅(Jetank 도커 환경 구축)
+# Jetank1 환경 세팅 & Top-CCTV1 연동 가이드
 
-[jetank1]
-도커 설치 및 실행법
--------------------------
+<br/>
+
+Jetank 로봇(도커 환경)과 Top-Down Camera 기반 AI 인식을 연동하여  
+젠가 픽/드롭 자동화를 수행하기 위한 **전체 실행 가이드**이다.
+
+---
+
+<br/>
+
+## 전체 실행 순서
+
+1. Jetank1에서 Docker 환경 구축  
+2. 필수 패키지 설치 후 Docker 이미지 저장(commit)  
+3. 카메라 ↔ Jetank 월드 좌표 Homography 캘리브레이션  
+4. Top-CCTV1 AI 서비스 실행  
+5. Jetank1 실행  
+
+---
+
+<br/>
+
+## 프로젝트 디렉터리 & 파일 구조 설명
+
+### [노트북]
+
+#### src (노트북)
+- 카메라 입력 퍼블리시
+- YOLO 기반 객체 인식
+- AI 서비스 제공
+- Homography 캘리브레이션
+```
+ros2_ws/
+└── src/
+    └── top_cctv_infer/
+        └── top_cctv_infer/
+            ├── image_publisher_node_cctv1.py
+            ├── infer_service_server_cctv1.py
+            ├── latptop_cam_click_calib.py
+            └── ...
+
+```
+
+<br/>
+
+
+### [Jetank1]
+
+#### jetank1 (Jetank 도커)
+- 로봇 팔/전자석 제어
+- 좌표 변환
+- 실제 픽 & 드롭 수행
+
+```
+jetank_ws/
+└── src/
+    └── jetank_move_test/
+        └── code/
+            ├── role_jetank1.py
+            ├── role_jetank_controller.py
+            ├── role_ai_utils.py
+            ├── role_dds_config.py
+            ├── jetank_calib_move_server.py
+            ├── servoInt.py
+            ├── servotest_1.py
+            ├── magnet_driver.py
+            ├── motor.py
+            ├── motorfront.py
+            └── ...
+```
+---
+
+<br/>
+
+## 요구사항
+
+- ROS 2 Humble
+- Docker
+- Jetank 로봇
+- 노트북 + USB 웹캠
+- 노트북 ↔ Jetank **같은 네트워크**
+
+---
+
+<br/><br/>
+
+
+# (0) Docker 환경 세팅 (Jetank1)
+
+## 0-1. Docker 컨테이너 실행 (최초)
+
 ```
 sudo docker run -it --rm \
     --name=my_bot \
@@ -14,8 +101,7 @@ sudo docker run -it --rm \
     -v ~/ros2_ws:/root/ros2_ws \
     ros:humble-ros-base
 ```
-위 명령어 실행 했는데
-`Unable to find image 'ros:humble-ros-base' locall` 라는 오류가 뜨면
+### 위 명령어 실행 했는데 `Unable to find image 'ros:humble-ros-base' locall` 라는 오류가 뜨면
 ```
 #ros:humble-ros-base 도커를 먼저 다운 받고
 sudo docker pull ros:humble-ros-base
@@ -24,13 +110,18 @@ sudo docker pull ros:humble-ros-base
 <img width="188" height="31" alt="image" src="https://github.com/user-attachments/assets/f42ce56a-1196-4f74-8fa5-7e362c1915b3" />
 이렇게 바뀌면 성공    
 
-도커 나가려면 
+<br/>
+
+## 0-2. Docker 컨테이너 종료
+
 ```
 exit
 ```
+---
+<br/>
 
-<br /><br /><br />
-도커 쓰기 전에 알아야 할 점
+## 0-3. Docker 이미지 저장 (중요)
+#### 도커 쓰기 전에 알아야 할 점
 -------------------------
 도커는 안에서 내용물 왔다 갔다 수정해도 껐다 키면 까먹음(단 ros2_ws에 따로 파일 만들거나 수정하는건 상관 없음 공유 폴더로 지정한거라)<br/>
 그래서 만약에 pip3 install, apt install같은 거 한 후에 저장하고 싶으면    
@@ -41,10 +132,11 @@ sudo docker commit my_bot my_jetbot
 ```
 이렇게 하면 기존 ros:humble-ros-base(얘는 인터넷에서 다운받은 도커)도커가  my_jetbot이라는 도커로 이름이 바뀌어 로컬 저장이 됨
 
+---
 
-<br /><br /><br />
-도커 여는 단축키 지정
-------------------------------------
+<br/>
+
+## 0-4. Docker 실행 단축키(alias)
 도커 열 때 마다
 ```
 sudo docker run -it --rm \
@@ -64,10 +156,14 @@ source ~/.bashrc
 ```
 이거 한 후 이제 `start_jetbot`칠 때마다 도커 실행됨
 
+---
 
+<br/>
 
-도커 만들고 설치해야할 것들
--------------------------------
+## 0-5. Docker 내부 필수 패키지 설치
+```
+start_jetbot
+```
 **-도커안에서-**
 ```
 apt update && apt install python3-pip -y
@@ -79,7 +175,7 @@ pip3 install Adafruit-MotorHAT
 pip3 install ultralytics
 ```
 
-**-Numpy 버전 맞춰주기-**
+### Numpy 버전 고정
 
 ```
 # 기존 Numpy 삭제하기
@@ -93,6 +189,10 @@ python3 -c "import numpy as np; print(np.__version__); print(np.__file__)"
 
 ```
 
+<br/>
+
+## 0-6. Jetank 코드 클론
+
 ```
 cd /root/ros2_ws
 mkdir src
@@ -101,9 +201,6 @@ git clone https://github.com/embedded-IEEE/jetank_move_test.git
 ```
 
 아마 레포가 private이라 로그인 하라 뜰거임 일단 한번 로그인 하고 git clone 하고 
-[#1] 
-<br/><br/><br/>
-
 ```
 cd /root/ros2_ws/src/jetank_move_test
 . install.sh
@@ -116,58 +213,16 @@ cd /root/ros2_ws/src/jetank_move_test
 sudo docker commit my_bot my_jetbot
 ```
 
+---
+<br/><br/><br/>
 
-servorinit실행
-=============================
-**-도커안에서-**
-```
-cd /root/ros2_ws/src/jetank_move_test/code
-python3 servoInt.py
-```
-위에 파이썬 실행한 후에 바로 일반 컴퓨터 터미널에서
-```
-ros2 topic echo /robot_state
-```
-실행하면 토픽 publish/subscribe 확인 가능    
-
-servotest실행
-==================================
-**도커안에서**
-이 코드는 같은 인터넷 망에서 다른 애가 Publish한 걸<br/>
-jetank가 subscribe해서 명령 받는 코드<br/><br/><br/>
-```
-python3 servotest_1.py
-```
-
-이후 다른 컴퓨터에서 
-```
-1.초기 위치
-ros2 topic pub --once /jetank_cmd std_msgs/msg/String "data: 'home'"
-2.  **팔 이동 (X=150, Y=50 좌표로 이동):**
-ros2 topic pub --once /jetank_cmd std_msgs/msg/String "data: 'move 150 50'"
-3.  **젯봇 전진:**
-ros2 topic pub --once /jetank_cmd std_msgs/msg/String "data: 'forward'"
-4.  **젯봇 정지:**
-ros2 topic pub --once /jetank_cmd std_msgs/msg/String "data: 'stop'"
-```
-여기 명령어 보내면 움직임<br/>
-<br/>
-그리고 움직일 때 얘도 state publish하니까
-다른 컴의 다른 터미널에서 
-```
-ros2 topic echo /robot_state
-```
-
-이거 하고 있으면 상태 pub할 수 있음
-
-
-# (1) 카메라 좌표와 Jetank 월드 좌표 맞춰주기(Homography)
+# (1) 카메라 좌표 ↔ Jetank 월드 좌표 (Homography)
 파일 구성 설명
 - src: 노트북에서 실행(Orchestration 역할)
 - jetank1: Jetank1 내부 도커 환경에서 실행
 
 
-[노트북]
+## [노트북]
 ```
 # 연결된 웹캠 번호 확인 -> image_publisher_node_cctv1의 CAM_NUM 설정해주기
 v4l2-ctl --list-devices
@@ -182,9 +237,7 @@ python3 latptop_cam_click_calib.py
 
 ```
 
-
-[jetank1]
-=========================
+## [jetank1]
 
 ```
 # Jetank 접속 후 도커 들어가기
@@ -213,8 +266,10 @@ DEFAULT_WORLD_POINTS_JETANK1 = "-43.0,160.0;-43.0,100.0;30.0,100.0;30.0,170.0"
 
 ```
 
+<br/><br/><br/>
+
 # (2) Jetank1과 Top_down Camera1 실행
-[노트북]
+## [노트북]
 
 ```
 cd ~/jetank_ws/src/top_cctv_infer/top_cctv_infer
@@ -228,7 +283,7 @@ python3 image_publisher_node_cctv1.py
 python3 infer_service_server_cctv1.py
 ```
 
-[jetank1]
+## [jetank1]
 ```
 cd src/jetank_move_test/code
 
